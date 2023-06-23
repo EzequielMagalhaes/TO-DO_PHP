@@ -3,3 +3,17 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+form {
+    text-align: center;
+}
+input [type=submit]{
+    color: red;
+}

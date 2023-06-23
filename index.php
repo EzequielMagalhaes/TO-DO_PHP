@@ -1,15 +1,34 @@
 <?php
+    define("HOST", "localhost");
+    define("USER","root");
+    define("PASS","");
+    define("BASE","crud_fullstack");
 
-    $con = new PDO("mysql:host=localhost;dbname=crud_fullstack","root","1234");
-    $con -> setAttribute(PDO::ATTR_ERRMODE, PDO:: ERRMODE_EXCEPTION);
-
-    if(isset($_POST['tarefa'])){
-        $tarefa = filter_input(INPUT_POST,'tarefa', FILTER_SANITIZE_STRING);
-        $query = "INSERT INTO tarefas (descricao, concluida) VALUES (:descricao, 0)";
-        $stm = $con -> prepare($query);
-        $stm -> bindParam('descricao',$tarefa);
-        $stm -> execute();
-    }
+    $con = new MySQLi(HOST, USER, PASS, BASE);
+        // Verificar a conexão
+        if (!$con) {
+            die("Falha na conexão: " . mysqli_connect_error());
+        }
+        echo "Conectado com sucesso!\n";
+        if (isset($_REQUEST["acao"])) {
+            switch($_REQUEST["acao"]){
+                case "cadastrar":
+                    $descricao = $_POST["descricao"];
+                    
+                    $concluida = $_POST["concluida"];
+                    $sql = "INSERT INTO tarefas (descricao,concluida) VALUES ('{$descricao}', 0)";
+                    $res = $con->query($sql);
+                    break;
+                    case "editar":
+                        //codigo.
+                        break;
+                    case "excluir":
+                        //codigo.
+                        break;
+                    }
+                    // Fechar a conexão
+                    mysqli_close($con);
+            }
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +40,11 @@
     <title>Lista de Tarefas</title>
 </head>
 <body>
-    <div class="form">
+    <div class="container">
         <form method="post">
-            Nova tarefa: <input type="text" placeholder="Digite aqui sua nova tarefa"></input>
+            <input type="hidden" name="acao" value="cadastrar">
+            Nova tarefa:<input type="text" name= "descricao" placeholder="Digite aqui sua nova tarefa"></input>
+            <input type="checkbox" name="concluida" id="ckbox">
             <input type="submit">
         </form>
     </div>
